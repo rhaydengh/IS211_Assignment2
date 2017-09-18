@@ -5,54 +5,62 @@
 
 import urllib2
 import datetime
+import sys
 import logging
-import arcparse
+import argparse
 import csv
-
-downloadData('https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv')
-processData(html)
+from StringIO import StringIO
 
 def downloadData(url):
     """This function downloads data from a url"""
-    str(url)
-    response = urllib2.urlopen(url)
-    global html
-    html = response.read()
-    return html.splitlines()
 
-def processData(filetext):
+    data = urllib2.urlopen(url)
+    html = data.read()
+
+
+def processData(csvdata):
     """This function processes contents from a data file, and returns a dictionary which maps 
-    a person's ID to a tuple of the form (name, birthday),and logs incorrectly formatted dates to a logfile"""
+    a person's ID to a tuple of the form (name, birthday)"""
 
     LOG_FILENAME = 'errors.log'
-    logging.basicConfig(filename=LOG_FILENAME, level=logging.ERROR)
+    logging.basicConfig(filename=LOG_FILENAME,
+                    level=logging.ERROR,
+                    )
     logger = logging.getLogger('assignment2')
 
-    newkey = parts[::2]
-    global mydict
-    mydict = {k: v for v, k in enumerate(newkey)}
-
-    for key, val in mydict:
+    mydict = {}
+    count_rows = 0
+    reader = csv.reader(StringIO(html))
+    for row in reader:
         try:
-            mydict.keys() == datetime.datetime.strptime(row[2], '%d/%m/%Y')
-        except ValueError:
-            logger.error('Error processing line #' val '%s for ID # %s',
-                         linenum, row[0])
-            logfile = open(LOG_FILENAME, 'rt')
-            try:
-                output = logfile.read()
-            finally:
-                logfile.close()
+            """Returns row and numbers them"""
+            count_rows += 1
+            datetime.datetime.strptime(row[2], '%d/%m/%Y')
+            mydict[row[0]] = (row[1], row[2])
 
+        except ValueError:
+            logger.error
+            print("Error processing line #", count_rows, "for ID #", row[0])
+
+    return mydict
 
 def displayPerson(id, personData):
-    """Displays a person's id and dob."""
-    str(personID)
-    int(id)
-
-    try:
-        print 'Person # {} is {} with a birthday of {}'.format(
-        id, personData[personID][0], dict.keys())
-    except:
-        print 'No user found with that ID'
+    id = raw_input("User ID: ")
+    {int(key):personData[key] for key in personData}
+    if id == personData[id]:
+        print("Person #", id, "is", row[1], "with a birthday of", row[2])
+    elif id != personData[id]:
+        print 'no user found with that id'
+    elif id in (0):
+        raise SystemExit
+    else: 
+        ValueError:
+        pass
+    
+def main():
+    csvData = downloadData(url)
+    personData = processData(html)
+    
+if __name__ == "__main__":
+    main()
 
