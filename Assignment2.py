@@ -55,11 +55,11 @@ def displayPerson(id, personData):
         raise SystemExit
     else: 
         ValueError:
-        pass
+            break
     
 def main():
     csvData = downloadData(url)
-    personData = processData(html)
+    personData = processData(csvData)
     
 if __name__ == "__main__":
     main()
